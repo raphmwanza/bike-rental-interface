@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Bike</title>
+</head>
+<body>
+    <h1>Rent Bike: {{ bike.bike_name }}</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="rental_start_date">Start Date:</label>
+        <input type="datetime-local" id="rental_start_date" name="rental_start_date" required>
+        <br>
+        <label for="rental_end_date">End Date:</label>
+        <input type="datetime-local" id="rental_end_date" name="rental_end_date" required>
+        <br>
+        <button type="submit">Rent</button>
+    </form>
+</body>
+</html>

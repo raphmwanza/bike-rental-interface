@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Rental</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; }
+        .form-container, .list-container { margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bike Rental Service</h1>
+        <p>Welcome, {{ username }}!</p>
+        
+        <div class="list-container">
+            <h2>Available Bikes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bike Name</th>
+                        <th>Bike Type</th>
+                        <th>Price</th>
+                        <th>Availability</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bike in bikes %}
+                        <tr>
+                            <td>{{ bike.bike_name }}</td>
+                            <td>{{ bike.bike_type }}</td>
+                            <td>{{ bike.price }}</td>
+                            <td>{{ bike.is_available|yesno:"Available,Not Available" }}</td>
+                            <td>
+                                {% if bike.is_available %}
+                                    <a href="{% url 'rent_bike' bike.bike_id %}">Rent</a>
+                                {% else %}
+                                    Not Available
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="list-container">
+            <h2>Rental History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rental ID</th>
+                        <th>Bike Name</th>
+                        <th>Bike Type</th>
+                        <th>Rental Start Date</th>
+                        <th>Rental End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in rentals %}
+                        <tr>
+                            <td>{{ rental.transaction_id }}</td>
+                            <td>{{ rental.bike_name }}</td>
+                            <td>{{ rental.bike_type }}</td>
+                            <td>{{ rental.rental_start_date }}</td>
+                            <td>{{ rental.rental_end_date|default:"Not Returned" }}</td>
+                            <td>
+                                {% if rental.rental_end_date %}
+                                    Returned
+                                {% else %}
+                                    <a href="{% url 'return_bike' rental.transaction_id %}">Return Bike</a>
+                                {% endif %}
+                                
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">No rental history found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</body>
+</html>
